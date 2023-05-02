@@ -65,7 +65,6 @@ function CandleSticks() {
       }
     },
   }
-
   useEffect(() => {
     fetch(`candles/trade:${timerValue}:tBTCUSD/hist?end=${new Date().getTime()}&limit=50`)
     .then((res)=>res.json())
