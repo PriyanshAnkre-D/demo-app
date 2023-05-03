@@ -4,7 +4,6 @@ import { ApexOptions } from 'apexcharts'
 import { TimeFrameContainer } from './timeFrameContainer'
 import { candleSticks } from '../constants/ohlc'
 import { getCandleSticks } from '../services/api/candles'
-import { error } from 'console'
 
 type OhlcValueType = {
   open: number | null
@@ -40,7 +39,7 @@ const CandleSticks: FC = (): ReactElement => {
       },
     },
     title: {
-      text: `BTC/USD O:${ohlcValue.open || ''} H:${ohlcValue.high || ''} L:${
+      text: `${candleSticks.TITLE} O:${ohlcValue.open || ''} H:${ohlcValue.high || ''} L:${
         ohlcValue.low || ''
       } C:${ohlcValue.close || ''}`,
       align: 'left',
@@ -97,7 +96,7 @@ const CandleSticks: FC = (): ReactElement => {
         const updatedRes = (res || []).map((item: CandleItem) => {
           const [mts, open, close, high, low] = item
           return {
-            x: new Date(mts),
+            x: mts,
             y: [open, high, low, close],
           }
         })

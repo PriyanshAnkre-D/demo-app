@@ -1,4 +1,5 @@
 export const candleSticks = {
+  TITLE: 'BTC/USD',
   INITIAL_TIME_FRAME: '1m',
   TIME_FRAME: [
     {
