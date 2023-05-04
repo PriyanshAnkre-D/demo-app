@@ -1,10 +1,10 @@
 import React, { FC, ReactElement, useEffect, useState } from 'react'
 import Chart from 'react-apexcharts'
 import { ApexOptions } from 'apexcharts'
-import { TimeFrameContainer } from './timeFrameContainer'
-import { candleSticks } from '../constants/ohlc'
-import { getCandleSticks } from '../services/api/candles'
-import { CandleItem, OhlcValueType } from '../types/candleSticks'
+import { TimeFrameContainer } from '../timeFrameContainer'
+import { candleSticks } from '../../constants/ohlc'
+import { getCandleSticks } from '../../services/api/candles'
+import { CandleItem, OhlcValueType } from './candleSticks'
 
 const CandleSticks: FC = (): ReactElement => {
   const [candles, setCandles] = useState<number[][]>([])

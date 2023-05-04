@@ -1,7 +1,7 @@
 import React, { FC } from 'react'
 import styles from './timeFrameContainer.module.css'
 import { candleSticks } from '../../constants/ohlc'
-import { PropType } from '../../types/timeFrameContainer'
+import { PropType } from './types'
 
 export const TimeFrameContainer: FC<PropType> = ({ onClick }) => {
   return (

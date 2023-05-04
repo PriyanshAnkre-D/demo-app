@@ -1,6 +1,6 @@
 import React, { ReactElement, FC } from 'react'
 import styles from './table.module.css'
-import { PropType } from '../../types/table'
+import { PropType } from './types'
 
 const Table: FC<PropType> = ({ columns, data }): ReactElement => {
   return (

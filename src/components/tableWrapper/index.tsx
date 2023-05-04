@@ -1,7 +1,7 @@
 import React, { FC, ReactElement, useEffect, useState } from 'react'
 import dynamic from 'next/dynamic'
 import styles from './tableWrapper.module.css'
-import { TableData } from '../../types/tableWrapper'
+import { TableData } from './types'
 import { column, columnReverse } from '../../constants/orderBook'
 const Table = dynamic(import('../table'))
 
