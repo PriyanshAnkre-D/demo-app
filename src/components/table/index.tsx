@@ -1,17 +1,6 @@
-import React, { useState, useEffect, ReactElement, FC } from 'react'
+import React, { ReactElement, FC } from 'react'
 import styles from './table.module.css'
-
-type TableData = {
-  count: number
-  amount: number
-  total: number
-  price: number
-}
-
-type PropType = {
-  columns: string[]
-  data: TableData[]
-}
+import { PropType } from '../../types/table'
 
 const Table: FC<PropType> = ({ columns, data }): ReactElement => {
   return (
@@ -27,12 +16,14 @@ const Table: FC<PropType> = ({ columns, data }): ReactElement => {
         <tbody>
           {data.map((item) => (
             <tr>
-              {columns.map(column=>
-              {
+              {columns.map((column) => {
                 const key = column.toLowerCase()
-                return(
-              <td className={styles.tableData}>{item[key as keyof typeof item]}</td>
-              )})}
+                return (
+                  <td className={styles.tableData}>
+                    {item[key as keyof typeof item]}
+                  </td>
+                )
+              })}
             </tr>
           ))}
         </tbody>

@@ -4,13 +4,7 @@ import { ApexOptions } from 'apexcharts'
 import { TimeFrameContainer } from './timeFrameContainer'
 import { candleSticks } from '../constants/ohlc'
 import { getCandleSticks } from '../services/api/candles'
-
-type OhlcValueType = {
-  open: number | null
-  high: number | null
-  low: number | null
-  close: number | null
-}
+import { CandleItem, OhlcValueType } from '../types/candleSticks'
 
 const CandleSticks: FC = (): ReactElement => {
   const [candles, setCandles] = useState<number[][]>([])
@@ -39,9 +33,9 @@ const CandleSticks: FC = (): ReactElement => {
       },
     },
     title: {
-      text: `${candleSticks.TITLE} O:${ohlcValue.open || ''} H:${ohlcValue.high || ''} L:${
-        ohlcValue.low || ''
-      } C:${ohlcValue.close || ''}`,
+      text: `${candleSticks.TITLE} O:${ohlcValue.open || ''} H:${
+        ohlcValue.high || ''
+      } L:${ohlcValue.low || ''} C:${ohlcValue.close || ''}`,
       align: 'left',
     },
     xaxis: {
@@ -65,7 +59,7 @@ const CandleSticks: FC = (): ReactElement => {
         position: 'topLeft',
       },
       custom() {
-        return '<div style={{display:"none"}}></div>'
+        return '<div style={{display:"none"}} />'
       },
     },
     grid: {
@@ -83,14 +77,6 @@ const CandleSticks: FC = (): ReactElement => {
     },
   }
   useEffect(() => {
-    type CandleItem = [
-      mts: number,
-      open: number,
-      close: number,
-      high: number,
-      low: number,
-      volume: number
-    ]
     getCandleSticks(timeFrame)
       .then((res) => {
         const updatedRes = (res || []).map((item: CandleItem) => {

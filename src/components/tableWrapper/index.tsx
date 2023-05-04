@@ -2,13 +2,7 @@ import dynamic from 'next/dynamic'
 import React, { FC, ReactElement, useEffect, useState } from 'react'
 import styles from './tableWrapper.module.css'
 const Table = dynamic(import('../table'))
-
-type TableData = {
-  count: number
-  amount: number
-  total: number
-  price: number
-}
+import { TableData } from "../../types/tableWrapper";
 
 const index: FC = (): ReactElement => {
   const [tableData, setTableData] = useState<TableData[]>([])

@@ -1,12 +1,9 @@
 import React, { FC } from 'react'
 import styles from './timeFrameContainer.module.css'
 import { candleSticks } from '../../constants/ohlc'
+import { PropType } from '../../types/timeFrameContainer'
 
-type Props = {
-  onClick: any
-}
-
-export const TimeFrameContainer: FC<Props> = ({ onClick }) => {
+export const TimeFrameContainer: FC<PropType> = ({ onClick }) => {
   return (
     <div className={styles.flex}>
       {candleSticks.TIME_FRAME.map((item) => (
