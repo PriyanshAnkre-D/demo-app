@@ -5,11 +5,10 @@ const nextConfig = {
     return [
       {
         source: '/:path*',
-        destination: 'https://api-pub.bitfinex.com/v2/:path*'
-      }
+        destination: 'https://api-pub.bitfinex.com/v2/:path*',
+      },
     ]
-  }
+  },
 }
 
 module.exports = nextConfig
-

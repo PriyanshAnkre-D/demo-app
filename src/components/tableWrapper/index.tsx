@@ -1,33 +1,65 @@
-import dynamic from 'next/dynamic'
 import React, { FC, ReactElement, useEffect, useState } from 'react'
+import dynamic from 'next/dynamic'
 import styles from './tableWrapper.module.css'
+import { TableData } from '../../types/tableWrapper'
+import { column, columnReverse } from '../../constants/orderBook'
 const Table = dynamic(import('../table'))
-import { TableData } from "../../types/tableWrapper";
 
-const index: FC = (): ReactElement => {
+const TableWrapper: FC = (): ReactElement => {
   const [tableData, setTableData] = useState<TableData[]>([])
   const [tableDataReverse, setTableDataReverse] = useState<TableData[]>([])
-  const column = ['COUNT', 'AMOUNT', 'TOTAL', 'PRICE']
-  const columnReverse = ['PRICE', 'TOTAL', 'AMOUNT', 'COUNT']
 
   const createTableData = (array: number[][]) => {
     let total = 0
     const isTableData = array.map((item: number[]) => {
       const [price, count, amount] = item
-      total += Math.abs(amount)
+      total += parseFloat(Math.abs(amount).toFixed(4))
       return {
         price,
         count,
-        amount: Math.abs(amount),
+        amount: parseFloat(Math.abs(amount).toFixed(4)),
         total,
       }
     })
     return isTableData
   }
 
+  const updateTotal = (array: TableData[]) => {
+    let total = 0
+    return array.map((item) => {
+      total += parseFloat(item.amount.toFixed(4))
+      return {
+        ...item,
+        total,
+      }
+    })
+  }
+
+  const sortHelper = (a: TableData, b: TableData): number => {
+    return a.price - b.price ? -1 : 1
+  }
+
+  const updateTableData = (
+    previous: TableData[],
+    newItem: TableData,
+    price: number
+  ) => {
+    let priceValueIndex = -1
+    priceValueIndex = previous.findIndex((item) => item.price === price)
+    if (priceValueIndex === -1) {
+      const isTableData = [...previous, newItem]
+      isTableData.sort(sortHelper)
+      const newData = updateTotal(isTableData)
+      return newData.slice(0, 25)
+    }
+    const tempTableData = [...previous]
+    tempTableData.splice(priceValueIndex, 1, newItem)
+    return updateTotal(tempTableData)
+  }
+
   useEffect(() => {
     const ws = new WebSocket('wss://api-pub.bitfinex.com/ws/2')
-    let msg = JSON.stringify({
+    const msg = JSON.stringify({
       event: 'subscribe',
       channel: 'book',
       symbol: 'tBTCUSD',
@@ -39,7 +71,25 @@ const index: FC = (): ReactElement => {
       const response = JSON.parse(event.data)
       if (Array.isArray(response)) {
         const [, isResponse] = response
-        if (isResponse.length > 3) {
+        if (isResponse.length === 3) {
+          const [price, count, amount] = isResponse
+
+          const newItem: TableData = {
+            price,
+            amount: Math.abs(amount),
+            count,
+            total: 0,
+          }
+          if (amount > 0) {
+            setTableData((previous: TableData[]) =>
+              updateTableData(previous, newItem, price)
+            )
+          } else {
+            setTableDataReverse((previous: TableData[]) =>
+              updateTableData(previous, newItem, price)
+            )
+          }
+        } else if (isResponse.length > 3) {
           const newResponse = (isResponse || [])
             .filter((item: number[]) => {
               const [, , amount] = item
@@ -67,8 +117,8 @@ const index: FC = (): ReactElement => {
     return () => {
       ws.close()
     }
+    // eslint-disable-next-line
   }, [])
-  console.log(tableData, tableDataReverse)
 
   return (
     <div className={styles.container}>
@@ -78,4 +128,4 @@ const index: FC = (): ReactElement => {
   )
 }
 
-export default index
+export default TableWrapper

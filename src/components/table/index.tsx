@@ -8,18 +8,20 @@ const Table: FC<PropType> = ({ columns, data }): ReactElement => {
       <table className={styles.table}>
         <thead>
           <tr>
-            {columns.map((item) => (
-              <th className={styles.column}>{item}</th>
+            {columns.map((item, index) => (
+              <th key={index} className={styles.column}>
+                {item}
+              </th>
             ))}
           </tr>
         </thead>
         <tbody>
-          {data.map((item) => (
-            <tr>
-              {columns.map((column) => {
+          {data.map((item, index) => (
+            <tr key={index}>
+              {columns.map((column, columnIndex) => {
                 const key = column.toLowerCase()
                 return (
-                  <td className={styles.tableData}>
+                  <td key={columnIndex} className={styles.tableData}>
                     {item[key as keyof typeof item]}
                   </td>
                 )

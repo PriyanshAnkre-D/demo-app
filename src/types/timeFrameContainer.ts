@@ -1,3 +1,3 @@
 export type PropType = {
-  onClick: any
+  onClick: (arg: string) => void
 }

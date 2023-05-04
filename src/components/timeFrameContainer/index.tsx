@@ -6,8 +6,12 @@ import { PropType } from '../../types/timeFrameContainer'
 export const TimeFrameContainer: FC<PropType> = ({ onClick }) => {
   return (
     <div className={styles.flex}>
-      {candleSticks.TIME_FRAME.map((item) => (
-        <div className={styles.timerItems} onClick={() => onClick(item.value)}>
+      {candleSticks.TIME_FRAME.map((item, index) => (
+        <div
+          key={index}
+          className={styles.timerItems}
+          onClick={() => onClick(item.value)}
+        >
           {item.label}
         </div>
       ))}
