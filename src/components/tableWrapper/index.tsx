@@ -27,10 +27,10 @@ const TableWrapper: FC = (): ReactElement => {
   const updateTotal = (array: TableData[]) => {
     let total = 0
     return array.map((item) => {
-      total += parseFloat(item.amount.toFixed(4))
+      total += item.amount
       return {
         ...item,
-        total,
+        total: parseFloat(total.toFixed(4)),
       }
     })
   }
@@ -76,7 +76,7 @@ const TableWrapper: FC = (): ReactElement => {
 
           const newItem: TableData = {
             price,
-            amount: Math.abs(amount),
+            amount: parseFloat(Math.abs(amount).toFixed(4)),
             count,
             total: 0,
           }
