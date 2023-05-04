@@ -35,20 +35,20 @@ const TableWrapper: FC = (): ReactElement => {
     })
   }
 
-  const sortHelper = (a: TableData, b: TableData): number => {
-    return a.price - b.price ? -1 : 1
-  }
-
   const updateTableData = (
     previous: TableData[],
     newItem: TableData,
-    price: number
+    price: number,
+    amount: number
   ) => {
     let priceValueIndex = -1
     priceValueIndex = previous.findIndex((item) => item.price === price)
     if (priceValueIndex === -1) {
       const isTableData = [...previous, newItem]
-      isTableData.sort(sortHelper)
+      isTableData.sort((a, b) => {
+        const result = a.price - b.price
+        return amount > 0 ? -result : result
+      })
       const newData = updateTotal(isTableData)
       return newData.slice(0, 25)
     }
@@ -82,11 +82,11 @@ const TableWrapper: FC = (): ReactElement => {
           }
           if (amount > 0) {
             setTableData((previous: TableData[]) =>
-              updateTableData(previous, newItem, price)
+              updateTableData(previous, newItem, price, amount)
             )
           } else {
             setTableDataReverse((previous: TableData[]) =>
-              updateTableData(previous, newItem, price)
+              updateTableData(previous, newItem, price, amount)
             )
           }
         } else if (isResponse.length > 3) {
