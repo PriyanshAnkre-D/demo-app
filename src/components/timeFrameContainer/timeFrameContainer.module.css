@@ -4,4 +4,10 @@
 .timerItems {
   padding: 2px;
   cursor: pointer;
+  padding: 5px;
+  border-radius: 4px;
+}
+
+.timerItems:hover{
+  background-color: #808080;
 }

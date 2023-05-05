@@ -4,7 +4,7 @@ import { ApexOptions } from 'apexcharts'
 import { TimeFrameContainer } from '../timeFrameContainer'
 import { candleSticks } from '../../constants/ohlc'
 import { getCandleSticks } from '../../services/api/candles'
-import { CandleItem, OhlcValueType } from './candleSticks'
+import { CandleItem, OhlcValueType } from './types'
 
 const CandleSticks: FC = (): ReactElement => {
   const [candles, setCandles] = useState<number[][]>([])
@@ -22,7 +22,7 @@ const CandleSticks: FC = (): ReactElement => {
       type: 'candlestick',
       height: 350,
       events: {
-        mouseMove(e, chart, config) {
+        mouseMove(_0, _1, config) {
           const isData =
             config?.config?.series[0].data[config.dataPointIndex]?.y || []
           if (isData.length) {
