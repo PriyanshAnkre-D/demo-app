@@ -3,6 +3,7 @@ import dynamic from 'next/dynamic'
 import styles from './tableWrapper.module.css'
 import { TableData } from './types'
 import { column, columnReverse } from '../../constants/orderBook'
+import { fetchBookData } from '../../services/api/orderbook'
 const Table = dynamic(import('../table'))
 
 const TableWrapper: FC = (): ReactElement => {
@@ -13,12 +14,12 @@ const TableWrapper: FC = (): ReactElement => {
     let total = 0
     const isTableData = array.map((item: number[]) => {
       const [price, count, amount] = item
-      total += parseFloat(Math.abs(amount).toFixed(4))
+      total += Math.abs(amount)
       return {
         price,
         count,
         amount: parseFloat(Math.abs(amount).toFixed(4)),
-        total,
+        total: parseFloat(total.toFixed(4)),
       }
     })
     return isTableData
@@ -58,17 +59,12 @@ const TableWrapper: FC = (): ReactElement => {
   }
 
   useEffect(() => {
-    const ws = new WebSocket('wss://api-pub.bitfinex.com/ws/2')
     const msg = JSON.stringify({
       event: 'subscribe',
       channel: 'book',
       symbol: 'tBTCUSD',
     })
-    ws.onopen = () => {
-      ws.send(msg)
-    }
-    ws.onmessage = (event) => {
-      const response = JSON.parse(event.data)
+    const socket = fetchBookData(msg, (response) => {
       if (Array.isArray(response)) {
         const [, isResponse] = response
         if (isResponse.length === 3) {
@@ -112,10 +108,15 @@ const TableWrapper: FC = (): ReactElement => {
           setTableDataReverse(newDataReverse)
         }
       }
+    })
+
+    socket.onerror = (error) => {
+      console.error(error)
+      socket.close()
     }
 
     return () => {
-      ws.close()
+      socket.close()
     }
     // eslint-disable-next-line
   }, [])
