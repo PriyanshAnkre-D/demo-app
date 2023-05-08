@@ -57,7 +57,7 @@ const updateTableData = (
 }
 
 export const handleOBWebSocketResponse = (
-  response: MessageEvent<any>,
+  response: MessageEvent,
   setOrderBookDataLeft: (
     arg: ((args: BookTableData[]) => BookTableData[]) | BookTableData[]
   ) => void,

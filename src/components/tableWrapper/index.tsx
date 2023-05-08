@@ -15,54 +15,6 @@ const TableWrapper: FC = (): ReactElement => {
     []
   )
 
-  const createTableData = (array: number[][]) => {
-    let total = 0
-    const isTableData = array.map((item: number[]) => {
-      const [price, count, amount] = item
-      total += Math.abs(amount)
-      return {
-        price,
-        count,
-        amount: parseFloat(Math.abs(amount).toFixed(4)),
-        total: parseFloat(total.toFixed(4)),
-      }
-    })
-    return isTableData
-  }
-
-  const updateTotal = (array: BookTableData[]) => {
-    let total = 0
-    return array.map((item) => {
-      total += item.amount
-      return {
-        ...item,
-        total: parseFloat(total.toFixed(4)),
-      }
-    })
-  }
-
-  const updateTableData = (
-    previous: BookTableData[],
-    newItem: BookTableData,
-    price: number,
-    amount: number
-  ) => {
-    let priceValueIndex = -1
-    priceValueIndex = previous.findIndex((item) => item.price === price)
-    if (priceValueIndex === -1) {
-      const isTableData = [...previous, newItem]
-      isTableData.sort((a, b) => {
-        const result = a.price - b.price
-        return amount > 0 ? -result : result
-      })
-      const newData = updateTotal(isTableData)
-      return newData.slice(0, 25)
-    }
-    const tempTableData = [...previous]
-    tempTableData.splice(priceValueIndex, 1, newItem)
-    return updateTotal(tempTableData)
-  }
-
   useEffect(() => {
     const url = 'wss://api-pub.bitfinex.com/ws/2'
     const msg = JSON.stringify({
