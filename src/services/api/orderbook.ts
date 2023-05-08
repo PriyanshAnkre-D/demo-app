@@ -1,8 +1,9 @@
-export const fetchBookData = (
+export const createWebSocket = (
+  url: string,
   msg: string,
   onMessage: (arg0: MessageEvent) => void
 ) => {
-  const ws = new WebSocket('wss://api-pub.bitfinex.com/ws/2')
+  const ws = new WebSocket(url)
   ws.onopen = () => {
     ws.send(msg)
   }

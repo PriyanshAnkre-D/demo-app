@@ -1,3 +1,3 @@
 export const TITLE = 'Order Book'
-export const column = ['COUNT', 'AMOUNT', 'TOTAL', 'PRICE']
-export const columnReverse = ['PRICE', 'TOTAL', 'AMOUNT', 'COUNT']
+export const COLUMN_LEFT = ['COUNT', 'AMOUNT', 'TOTAL', 'PRICE']
+export const COLUMN_RIGHT = ['PRICE', 'TOTAL', 'AMOUNT', 'COUNT']

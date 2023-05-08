@@ -1,4 +1,4 @@
-export type TableData = {
+export type BookTableData = {
   count: number
   amount: number
   total: number

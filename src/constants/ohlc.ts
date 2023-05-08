@@ -1,4 +1,4 @@
-export const candleSticks = {
+export const CandleStick = {
   TITLE: 'BTC/USD',
   INITIAL_TIME_FRAME: '1m',
   TIME_FRAME: [

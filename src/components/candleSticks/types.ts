@@ -1,8 +1,8 @@
 export type OhlcValueType = {
-  open: number | null
-  high: number | null
-  low: number | null
-  close: number | null
+  open: number
+  high: number
+  low: number
+  close: number
 }
 
 export type CandleItem = [

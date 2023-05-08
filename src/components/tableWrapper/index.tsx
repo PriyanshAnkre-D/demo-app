@@ -1,14 +1,19 @@
 import React, { FC, ReactElement, useEffect, useState } from 'react'
 import dynamic from 'next/dynamic'
 import styles from './tableWrapper.module.css'
-import { TableData } from './types'
-import { column, columnReverse } from '../../constants/orderBook'
-import { fetchBookData } from '../../services/api/orderbook'
+import { BookTableData } from './types'
+import { COLUMN_LEFT, COLUMN_RIGHT } from '../../constants/orderBook'
+import { createWebSocket } from '../../services/api/orderbook'
+import { handleOBWebSocketResponse } from './utility'
 const Table = dynamic(import('../table'))
 
 const TableWrapper: FC = (): ReactElement => {
-  const [tableData, setTableData] = useState<TableData[]>([])
-  const [tableDataReverse, setTableDataReverse] = useState<TableData[]>([])
+  const [orderBookDataLeft, setOrderBookDataLeft] = useState<BookTableData[]>(
+    []
+  )
+  const [orderBookDataRight, setOrderBookDataRight] = useState<BookTableData[]>(
+    []
+  )
 
   const createTableData = (array: number[][]) => {
     let total = 0
@@ -25,7 +30,7 @@ const TableWrapper: FC = (): ReactElement => {
     return isTableData
   }
 
-  const updateTotal = (array: TableData[]) => {
+  const updateTotal = (array: BookTableData[]) => {
     let total = 0
     return array.map((item) => {
       total += item.amount
@@ -37,8 +42,8 @@ const TableWrapper: FC = (): ReactElement => {
   }
 
   const updateTableData = (
-    previous: TableData[],
-    newItem: TableData,
+    previous: BookTableData[],
+    newItem: BookTableData,
     price: number,
     amount: number
   ) => {
@@ -59,55 +64,18 @@ const TableWrapper: FC = (): ReactElement => {
   }
 
   useEffect(() => {
+    const url = 'wss://api-pub.bitfinex.com/ws/2'
     const msg = JSON.stringify({
       event: 'subscribe',
       channel: 'book',
       symbol: 'tBTCUSD',
     })
-    const socket = fetchBookData(msg, (response) => {
-      if (Array.isArray(response)) {
-        const [, isResponse] = response
-        if (isResponse.length === 3) {
-          const [price, count, amount] = isResponse
-
-          const newItem: TableData = {
-            price,
-            amount: parseFloat(Math.abs(amount).toFixed(4)),
-            count,
-            total: 0,
-          }
-          if (amount > 0) {
-            setTableData((previous: TableData[]) =>
-              updateTableData(previous, newItem, price, amount)
-            )
-          } else {
-            setTableDataReverse((previous: TableData[]) =>
-              updateTableData(previous, newItem, price, amount)
-            )
-          }
-        } else if (isResponse.length > 3) {
-          const newResponse = (isResponse || [])
-            .filter((item: number[]) => {
-              const [, , amount] = item
-              return amount > 0
-            })
-            .sort((a: number[], b: number[]) => {
-              const [priceA] = a
-              const [priceB] = b
-              return priceA - priceB ? 1 : -1
-            })
-          const newResponseReverse = (isResponse || []).filter(
-            (item: number[]) => {
-              const [, , amount] = item
-              return amount < 0
-            }
-          )
-          const newData = createTableData(newResponse)
-          const newDataReverse = createTableData(newResponseReverse)
-          setTableData(newData)
-          setTableDataReverse(newDataReverse)
-        }
-      }
+    const socket = createWebSocket(url, msg, (response) => {
+      handleOBWebSocketResponse(
+        response,
+        setOrderBookDataLeft,
+        setOrderBookDataRight
+      )
     })
 
     socket.onerror = (error) => {
@@ -123,8 +91,8 @@ const TableWrapper: FC = (): ReactElement => {
 
   return (
     <div className={styles.container}>
-      <Table columns={column} data={tableData} />
-      <Table columns={columnReverse} data={tableDataReverse} />
+      <Table columns={COLUMN_LEFT} data={orderBookDataLeft} />
+      <Table columns={COLUMN_RIGHT} data={orderBookDataRight} />
     </div>
   )
 }
