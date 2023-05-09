@@ -45,6 +45,7 @@ const TickersTable: FC<PropType> = ({ onClick }): ReactElement => {
                     <tr
                       onClick={() => onClick(elem.name + elem.currency)}
                       key={index}
+                      className={tickerStyle.tableRow}
                     >
                       {index === 0 ? (
                         <td className={styles.tableData}>{elem.name}</td>

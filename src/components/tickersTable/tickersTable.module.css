@@ -13,3 +13,7 @@
 .redText {
   color: red;
 }
+
+.tableRow {
+  cursor: pointer;
+}
