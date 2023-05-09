@@ -1,11 +1,22 @@
+import { Ticker } from '@/src/components/tickersTable/types'
 import dynamic from 'next/dynamic'
-import React, { FC } from 'react'
+import React, { FC, useState } from 'react'
+import styles from './ohlc.module.css'
+const CandleSticks = dynamic(import('../../components/candleSticks'), {
+  ssr: false,
+})
+const TickersTable = dynamic(import('../../components/tickersTable'), {
+  ssr: false,
+})
 
 const OhlcDasboard: FC = () => {
-  const CandleSticks = dynamic(import('../../components/candleSticks'), {
-    ssr: false,
-  })
-  return <CandleSticks />
+  const [tickerValue, setTickerValue] = useState<string>('BTCUSD')
+  return (
+    <div className={styles.OhlcContainer}>
+      <TickersTable onClick={(value) => setTickerValue(value)} />
+      <CandleSticks tickerValue={tickerValue} />
+    </div>
+  )
 }
 
 export default OhlcDasboard

@@ -13,3 +13,7 @@ export type CandleItem = [
   low: number,
   volume: number
 ]
+
+export type PropType = {
+  tickerValue: string
+}

@@ -2,7 +2,12 @@ import React, { FC, ReactElement, useEffect, useState } from 'react'
 import dynamic from 'next/dynamic'
 import styles from './tableWrapper.module.css'
 import { BookTableData } from './types'
-import { COLUMN_LEFT, COLUMN_RIGHT } from '../../constants/orderBook'
+import {
+  COLUMN_LEFT,
+  COLUMN_RIGHT,
+  BOOK,
+  SUBSCRIBE,
+} from '../../constants/orderBook'
 import { createWebSocket } from '../../services/api/orderbook'
 import { handleOBWebSocketResponse } from './utility'
 const Table = dynamic(import('../table'))
@@ -18,8 +23,8 @@ const TableWrapper: FC = (): ReactElement => {
   useEffect(() => {
     const url = 'wss://api-pub.bitfinex.com/ws/2'
     const msg = JSON.stringify({
-      event: 'subscribe',
-      channel: 'book',
+      event: SUBSCRIBE,
+      channel: BOOK,
       symbol: 'tBTCUSD',
     })
     const socket = createWebSocket(url, msg, (response) => {
