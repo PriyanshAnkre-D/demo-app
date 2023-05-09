@@ -42,7 +42,10 @@ const TickersTable: FC<PropType> = ({ onClick }): ReactElement => {
                     (elem.dailyChangeRelative * 100).toFixed(2)
                   )
                   return (
-                    <tr onClick={() => onClick(elem.name+elem.currency)}>
+                    <tr
+                      onClick={() => onClick(elem.name + elem.currency)}
+                      key={index}
+                    >
                       {index === 0 ? (
                         <td className={styles.tableData}>{elem.name}</td>
                       ) : (

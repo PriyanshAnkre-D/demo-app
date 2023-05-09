@@ -1,4 +1,3 @@
-import { Ticker } from '@/src/components/tickersTable/types'
 import dynamic from 'next/dynamic'
 import React, { FC, useState } from 'react'
 import styles from './ohlc.module.css'
