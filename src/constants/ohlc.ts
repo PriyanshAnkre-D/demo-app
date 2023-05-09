@@ -40,3 +40,5 @@ export const CandleStick = {
     },
   ],
 }
+
+export const INITIAL_TRADING_PAIR = 'BTCUSD'

@@ -1,3 +1,4 @@
+import { INITIAL_TRADING_PAIR } from '@/src/constants/ohlc'
 import dynamic from 'next/dynamic'
 import React, { FC, useState } from 'react'
 import styles from './ohlc.module.css'
@@ -9,7 +10,7 @@ const TickersTable = dynamic(import('../../components/tickersTable'), {
 })
 
 const OhlcDasboard: FC = () => {
-  const [tickerValue, setTickerValue] = useState<string>('BTCUSD')
+  const [tickerValue, setTickerValue] = useState<string>(INITIAL_TRADING_PAIR)
   return (
     <div className={styles.OhlcContainer}>
       <TickersTable onClick={(value) => setTickerValue(value)} />
